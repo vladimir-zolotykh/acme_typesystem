@@ -98,6 +98,10 @@ class TestStock(unittest.TestCase):
     def test_30_name(self):
         self.assertEqual(astuple(self.stock), ("ACME", 90, 120.3))
 
+    def test_40_name(self):
+        with self.assertRaises(ValueError):
+            self.stock.name = "ABRACADABRA"
+
 
 if __name__ == "__main__":
     unittest.main()
