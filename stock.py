@@ -12,6 +12,11 @@ class Descriptor:
         for key, value in opts.items():
             setattr(self, key, value)
 
+    def __get__(self, instance, owner):
+        if instance is None:
+            return self
+        return getattr(instance, self.name)
+
     def __set__(self, instance, value):
         setattr(instance, self.name, value)
 
@@ -77,12 +82,21 @@ class Stock:
         self.price = price
 
 
+def astuple(stock: Stock) -> tuple[str, int, float]:
+    return stock.name, stock.shares, stock.price
+
+
 class TestStock(unittest.TestCase):
     def setUp(self):
         self.stock = Stock("ACME", 90, 120.3)
 
-    def test_10_name(self):
+    def test_20_name(self):
         self.assertEqual(self.stock.name, "ACME")
+        self.assertEqual(self.stock.shares, 90)
+        self.assertEqual(self.stock.price, 120.3)
+
+    def test_30_name(self):
+        self.assertEqual(astuple(self.stock), ("ACME", 90, 120.3))
 
 
 if __name__ == "__main__":
