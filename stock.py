@@ -83,7 +83,7 @@ class Stock:
 
 
 def astuple(stock: Stock) -> tuple[str, int, float]:
-    return stock.name, stock.shares, stock.price
+    return tuple(stock.__dict__.values())
 
 
 class TestStock(unittest.TestCase):
