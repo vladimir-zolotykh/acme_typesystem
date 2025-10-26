@@ -96,10 +96,18 @@ class TestStock(unittest.TestCase):
     def test_20_name(self):
         self.assertEqual(astuple(self.stock), ACME)
 
-    def test_30_name(self):
+    def test_30_allfields(self):
         self.assertEqual(astuple(self.stock), ACME)
 
-    def test_40_name(self):
+    def test_40_shares(self):
+        with self.assertRaises(ValueError):
+            self.stock.shares = -10
+
+    def test_50_price(self):
+        with self.assertRaises(TypeError):
+            self.stock.price = "a lot"
+
+    def test_60_name(self):
         with self.assertRaises(ValueError):
             self.stock.name = "ABRACADABRA"
 
