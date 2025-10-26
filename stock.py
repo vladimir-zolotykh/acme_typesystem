@@ -75,8 +75,10 @@ def set_descriptors(**kw):
     def decorate(cls):
         for k, v in kw.items():
             if isinstance(v, Descriptor):
-                v.__set_name__(cls, k)
-                setattr(cls, k, v)
+                descriptor = v
+                name = k
+                descriptor.__set_name__(cls, name)
+                setattr(cls, name, descriptor)
             else:
                 # setattr(cls, k, v(k))
                 raise ValueError(f"Expected a descriptor, not {v}")
