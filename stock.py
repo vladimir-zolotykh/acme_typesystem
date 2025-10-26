@@ -86,17 +86,18 @@ def astuple(stock: Stock) -> tuple[str, int, float]:
     return tuple(stock.__dict__.values())
 
 
+ACME = ("ACME", 50, 91.1)
+
+
 class TestStock(unittest.TestCase):
     def setUp(self):
-        self.stock = Stock("ACME", 90, 120.3)
+        self.stock = Stock(*ACME)
 
     def test_20_name(self):
-        self.assertEqual(self.stock.name, "ACME")
-        self.assertEqual(self.stock.shares, 90)
-        self.assertEqual(self.stock.price, 120.3)
+        self.assertEqual(astuple(self.stock), ACME)
 
     def test_30_name(self):
-        self.assertEqual(astuple(self.stock), ("ACME", 90, 120.3))
+        self.assertEqual(astuple(self.stock), ACME)
 
     def test_40_name(self):
         with self.assertRaises(ValueError):
