@@ -71,11 +71,24 @@ class UnsignedInteger(Integer, Unsigned):
     pass
 
 
-class Stock:
-    name = MaxSizedString(size=8)
-    shares = UnsignedInteger()
-    price = UnsignedFloat()
+def set_descriptors(**kw):
+    def decorate(cls):
+        for k, v in kw.items():
+            if isinstance(v, Descriptor):
+                v.__set_name__(cls, k)
+                setattr(cls, k, v)
+            else:
+                # setattr(cls, k, v(k))
+                raise ValueError(f"Expected a descriptor, not {v}")
+        return cls
 
+    return decorate
+
+
+@set_descriptors(
+    name=MaxSizedString(size=8), shares=UnsignedInteger(), price=UnsignedFloat()
+)
+class Stock:
     def __init__(self, name, shares, price):
         self.name = name
         self.shares = shares
