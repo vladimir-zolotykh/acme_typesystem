@@ -5,10 +5,9 @@ import unittest
 
 
 class Descriptor:
-    def __set_name__(self, owner, name):
-        self.name = "_" + name
-
-    def __init__(self, **opts):
+    def __init__(self, name=None, **opts):
+        if name is not None:
+            self.name = "_" + name
         for key, value in opts.items():
             setattr(self, key, value)
 
@@ -71,7 +70,15 @@ class UnsignedInteger(Integer, Unsigned):
     pass
 
 
-class Stock:
+class MetaDescriptors(type):
+    def __new__(cls, clsname, bases, clsdict):
+        for name, value in clsdict.items():
+            if isinstance(value, Descriptor):
+                setattr(value, "name", "_" + name)
+        return super().__new__(cls, clsname, bases, clsdict)
+
+
+class Stock(metaclass=MetaDescriptors):
     name = MaxSizedString(size=8)
     shares = UnsignedInteger()
     price = UnsignedFloat()
